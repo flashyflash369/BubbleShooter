@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f91a46ac537f99444a762e201d2d421d, type: 3}
+  m_Name: Intro
+  m_EditorClassIdentifier: 
+  StoryPoint: 0
+  baseUI: {fileID: 7746941187273771369, guid: 4e616b5be2511be4f8294221554e470f, type: 3}
+  narrationText:
+  - "Bob Bubble:  Ma, I\u2019m going to be fine, so stop crying. "
+  - 'Miss Bubble:  Bob, Your father was killed by the Flushingtons! How do I stop
+    worrying over you? '
+  - "Bob Bubble: It\u2019s okay, Ma, I can look after myself. "
+  - ...
+  - "Bubble Capone:  Here\u2019s the bubble Gun."
+  - 'Bob Bubble: Thanks.      '
+  - "  Okay, I\u2019m Off!"
+  duration: 5

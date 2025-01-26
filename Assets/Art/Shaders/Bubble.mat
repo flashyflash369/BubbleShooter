@@ -136,7 +136,7 @@ Material:
     - _TessMax: 25
     - _TessMaxDisp: 25
     - _TessMin: 10
-    - _TessPhongStrength: 0.5
+    - _TessPhongStrength: 0.041
     - _TessValue: 8
     - _WorkflowMode: 1
     - _ZWrite: 1
