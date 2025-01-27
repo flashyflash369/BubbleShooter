@@ -14,7 +14,7 @@ public class PlaySplash : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButton(0))
+        if(Input.GetMouseButtonDown(0))
         {
             for(int i = 0; i < vfx.Count; i++)
             {
