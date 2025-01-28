@@ -70,3 +70,14 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+
+#Scene Libraries
+
+/Assets\Scenes\Library.meta
+/Assets\Scenes\Library
+*.meta
+Assets/Scenes/Library.meta
+Assets/Scenes/Library.meta
+Assets/Scenes/Library/Artifacts.meta
+/Assets/Scenes/Library/Artifacts
