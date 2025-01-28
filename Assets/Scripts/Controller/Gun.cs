@@ -50,7 +50,7 @@ public class Gun : MonoBehaviour
             }
               if(Input.GetMouseButtonDown(0))
             {
-                
+                if(PlayerStats.instance.SoapLevel<=0){return;}
                 if(firerate<0)
                 { 
                     Fire(); 
@@ -76,6 +76,7 @@ public class Gun : MonoBehaviour
             Debug.Log("Fire");
             EventSystem.TriggerPlayShoot();
             GameObject spawnBullet = ObjectPool.instance.GetObject("Bullet",firePos.transform);
+            PlayerStats.instance.SoapLevel-=1;
     }
 
 }
