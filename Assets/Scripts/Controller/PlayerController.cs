@@ -66,6 +66,7 @@ public class PlayerController : MonoBehaviour
         
           resetRecoilForce = recoilForce;
           resethitForce = hitForce;
+          hitForce = 0;
          Currentstate = PlayerState.idle;
          Application.targetFrameRate = 60;
        //  Physics.gravity = new Vector3(0, -1*Mathf.Abs(gravityScale), 0);
@@ -300,7 +301,7 @@ void PhyscisUpdate()
 
     [SerializeField] private float hitForce;
     [SerializeField] private float dampHitForce = 1000;
-    [SerializeField] private Transform hitPos;
+     private Vector3 hitPos;
    private float resethitForce;
     
 
@@ -313,7 +314,7 @@ void PhyscisUpdate()
             flashMat.SetFloat("_OnFlash",1);
             Invoke("FlashOff",0.1f);
             hitForce = resethitForce;
-           
+            hitPos = other.gameObject.transform.position;
           
           
 
@@ -326,10 +327,11 @@ void PhyscisUpdate()
 
         if(hitForce>0) 
         {
-            Vector3 direction = transform.position- hitPos.position;
-            direction.z=0;
             
-            rb.AddForce(-direction.normalized*hitForce*Time.deltaTime*100,ForceMode.Acceleration);
+            Vector3 direction = hitPos-transform.position;
+            direction.z=0;
+               rb.AddForce(Vector2.right*-direction.x*hitForce*Time.deltaTime*100,ForceMode.Acceleration);
+               rb.AddForce(Vector2.up*-direction.y*hitForce/100*Time.deltaTime*100,ForceMode.Acceleration);
               hitForce-=Time.deltaTime*dampHitForce;
         }
        
