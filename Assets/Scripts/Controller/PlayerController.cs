@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
     private float resetRecoilForce;
      private Vector3 mousePos;
      public Material flashMat;
-     
+     private float speedReset;
     
      
 //    private Animator anim;
@@ -63,6 +63,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         currentMouth = mouths[0];
         currentMouth.SetActive(true);
+        speedReset = speed;
         
           resetRecoilForce = recoilForce;
           resethitForce = hitForce;
@@ -327,12 +328,16 @@ void PhyscisUpdate()
 
         if(hitForce>0) 
         {
-            
+            speed = 0;
             Vector3 direction = hitPos-transform.position;
             direction.z=0;
                rb.AddForce(Vector2.right*-direction.x*hitForce*Time.deltaTime*100,ForceMode.Acceleration);
                rb.AddForce(Vector2.up*-direction.y*hitForce/100*Time.deltaTime*100,ForceMode.Acceleration);
               hitForce-=Time.deltaTime*dampHitForce;
+        }
+        else
+        {
+            speed = speedReset;
         }
        
     }
