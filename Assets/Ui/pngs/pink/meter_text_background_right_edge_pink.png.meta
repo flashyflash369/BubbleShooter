@@ -7,7 +7,11 @@ TextureImporter:
   mipmaps:
     mipMapMode: 0
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     enableMipMap: 0
+=======
+    enableMipMap: 1
+>>>>>>> Stashed changes
 =======
     enableMipMap: 1
 >>>>>>> Stashed changes
@@ -42,6 +46,7 @@ TextureImporter:
     aniso: 1
     mipBias: 0
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     wrapU: 1
     wrapV: 1
     wrapW: 0
@@ -50,6 +55,8 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 1
 =======
+=======
+>>>>>>> Stashed changes
     wrapU: 0
     wrapV: 0
     wrapW: 0
@@ -57,6 +64,9 @@ TextureImporter:
   lightmap: 0
   compressionQuality: 50
   spriteMode: 0
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   spriteExtrude: 1
   spriteMeshType: 1
@@ -67,9 +77,15 @@ TextureImporter:
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
+=======
+  alphaIsTransparency: 0
+  spriteTessellationDetail: -1
+  textureType: 0
+>>>>>>> Stashed changes
 =======
   alphaIsTransparency: 0
   spriteTessellationDetail: -1
@@ -133,7 +149,11 @@ TextureImporter:
     physicsShape: []
     bones: []
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     spriteID: 5e97eb03825dee720800000000000000
+=======
+    spriteID: 
+>>>>>>> Stashed changes
 =======
     spriteID: 
 >>>>>>> Stashed changes

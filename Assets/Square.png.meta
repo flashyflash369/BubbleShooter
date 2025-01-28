@@ -7,7 +7,11 @@ TextureImporter:
   mipmaps:
     mipMapMode: 0
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     enableMipMap: 0
+=======
+    enableMipMap: 1
+>>>>>>> Stashed changes
 =======
     enableMipMap: 1
 >>>>>>> Stashed changes
@@ -42,6 +46,7 @@ TextureImporter:
     aniso: 1
     mipBias: 0
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     wrapU: 1
     wrapV: 1
     wrapW: 0
@@ -50,6 +55,8 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 1
 =======
+=======
+>>>>>>> Stashed changes
     wrapU: 0
     wrapV: 0
     wrapW: 0
@@ -57,11 +64,15 @@ TextureImporter:
   lightmap: 0
   compressionQuality: 50
   spriteMode: 0
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
   spritePixelsToUnits: 50
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
@@ -71,6 +82,8 @@ TextureImporter:
   spriteTessellationDetail: 0
   textureType: 8
 =======
+=======
+>>>>>>> Stashed changes
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
@@ -78,6 +91,9 @@ TextureImporter:
   alphaIsTransparency: 0
   spriteTessellationDetail: -1
   textureType: 0
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   textureShape: 1
   singleChannelComponent: 0
@@ -135,6 +151,7 @@ TextureImporter:
     sprites: []
     outline: []
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     physicsShape:
     - - {x: 84, y: 32}
       - {x: 84, y: 106}
@@ -144,10 +161,15 @@ TextureImporter:
     spriteID: 5e97eb03825dee720800000000000000
     internalID: 1537655665
 =======
+=======
+>>>>>>> Stashed changes
     physicsShape: []
     bones: []
     spriteID: 
     internalID: 0
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     vertices: []
     indices: 
