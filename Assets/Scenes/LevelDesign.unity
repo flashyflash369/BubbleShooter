@@ -241,11 +241,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b78abac3475553341800dc759f5d1105, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0.5
-  jumpForce: 400
-  turnSpeed: 100
-  graphic: {fileID: 296938357}
-  isGrounded: 0
 --- !u!114 &126205602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,9 +253,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb8aac076f0b45b429722a5b1064a7b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 5741329309142894205, guid: 134dec774b9c75d4a9f715a9e57c86c9,
-    type: 3}
-  bulletAnchor: {fileID: 1368342598}
 --- !u!1001 &180548927
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2277,6 +2269,7 @@ GameObject:
   - component: {fileID: 724669972}
   - component: {fileID: 724669973}
   - component: {fileID: 724669974}
+  - component: {fileID: 724669975}
   m_Layer: 0
   m_Name: AudioSourceManager
   m_TagString: Untagged
@@ -2408,6 +2401,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shootAudio: {fileID: 8300000, guid: 48a4be45cf1fc524d9482e880a218958, type: 3}
+  jumpAudio: {fileID: 8300000, guid: 80fe46b459c381b40ad6e74d5428f017, type: 3}
+--- !u!114 &724669975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724669971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65cb3e595cff73543ac468f08605bceb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &724899784
 GameObject:
   m_ObjectHideFlags: 0
@@ -3905,9 +3911,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb8aac076f0b45b429722a5b1064a7b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 5741329309142894205, guid: 134dec774b9c75d4a9f715a9e57c86c9,
-    type: 3}
-  bulletAnchor: {fileID: 1368342598}
 --- !u!114 &1393721599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3920,11 +3923,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b78abac3475553341800dc759f5d1105, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0.5
-  jumpForce: 400
-  turnSpeed: 0
-  graphic: {fileID: 0}
-  isGrounded: 0
 --- !u!1 &1402736054
 GameObject:
   m_ObjectHideFlags: 0

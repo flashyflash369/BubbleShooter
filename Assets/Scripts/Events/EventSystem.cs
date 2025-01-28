@@ -67,6 +67,9 @@ public class EventSystem : MonoBehaviour
        Playshoot?.Invoke();
     }
 
+    //PLAYER JUMP
+    public event EventHandler OnJumpEvent;
+
 
 
 
