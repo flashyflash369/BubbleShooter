@@ -19,6 +19,8 @@ public class Soap : Collectibles
        Debug.Log("Added 1 to Healthlevel");
 
        EventSystem.TriggerCollectible(SoapLevel, HealthAdd); // Raise the event, passing the storyPointIndex
+       PlayerStats.instance.SoapLevel+=SoapLevel;
+       PlayerStats.instance.Health+=HealthAdd;
        //Destroy
        //Destroy.gameObject;
       }

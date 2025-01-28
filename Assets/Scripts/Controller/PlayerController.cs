@@ -91,7 +91,7 @@ private void Test()
        
 
        Move();
-       if(Input.GetMouseButtonDown(0)){dashSpeed = resetDash ;Recoil();}
+       if(Input.GetMouseButtonDown(0)){ if(PlayerStats.instance.SoapLevel<=0){return;}dashSpeed = resetDash ;Recoil();}
       
 
     }
