@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float gravityScale;
     [SerializeField]
     [Tooltip("")]
-    private float dashSpeed = 0;
+    private float recoilForce = 0;
     [SerializeField]
     private Rigidbody rb;
     [SerializeField]
@@ -37,8 +37,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private float groundRadius;
     [SerializeField] private float jumpForce;
-    private float resetDash;
+    private float resetRecoilForce;
      private Vector3 mousePos;
+     public Material flashMat;
+     private float speedReset;
+    
+     
 //    private Animator anim;
     enum PlayerState
     {
@@ -55,12 +59,16 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
        void Start()
     {
+       
         rb = GetComponent<Rigidbody>();
         currentMouth = mouths[0];
         currentMouth.SetActive(true);
+        speedReset = speed;
         
-          resetDash = dashSpeed;
-        Currentstate = PlayerState.idle;
+          resetRecoilForce = recoilForce;
+          resethitForce = hitForce;
+          hitForce = 0;
+         Currentstate = PlayerState.idle;
          Application.targetFrameRate = 60;
        //  Physics.gravity = new Vector3(0, -1*Mathf.Abs(gravityScale), 0);
     
@@ -91,8 +99,8 @@ private void Test()
        
 
        Move();
-       if(Input.GetMouseButtonDown(0)){ if(PlayerStats.instance.SoapLevel<=0){return;}dashSpeed = resetDash ;Recoil();}
-      
+       if(Input.GetMouseButtonDown(0)){ if(PlayerStats.instance.SoapLevel<=0){return;}recoilForce = resetRecoilForce ;Recoil();}
+      HitbackForce();
 
     }
     /// <summary>
@@ -285,13 +293,53 @@ void PhyscisUpdate()
           Vector3 dashDirection = transform.position-firePos.position;
           dashDirection.z = 0;
           //rb.AddForce(dashDirection*dashSpeed*Time.deltaTime*6,ForceMode.Impulse);
-          rb.velocity =dashDirection*dashSpeed*Time.deltaTime*6 ;
-          dashSpeed-=Time.deltaTime*DashDamping;
-          if(dashSpeed<0){dashSpeed = resetDash;}
+          rb.velocity =dashDirection*recoilForce*Time.deltaTime*6 ;
+          recoilForce-=Time.deltaTime*DashDamping;
+          if(recoilForce<0){recoilForce = resetRecoilForce;}
     }
     
   #endregion
-  
- 
+
+    [SerializeField] private float hitForce;
+    [SerializeField] private float dampHitForce = 1000;
+     private Vector3 hitPos;
+   private float resethitForce;
+    
+
+    private void OnTriggerEnter(Collider other)
+    {
+        IDamagable OnPlayerHit = other.gameObject.GetComponent<IDamagable>();
+        if(OnPlayerHit!=null)
+        {
+            OnPlayerHit.OnHit();
+            flashMat.SetFloat("_OnFlash",1);
+            Invoke("FlashOff",0.1f);
+            hitForce = resethitForce;
+            hitPos = other.gameObject.transform.position;
+          
+          
+
+          
+        }
+    }
+    public void FlashOff()=> flashMat.SetFloat("_OnFlash",0);
+    public void HitbackForce()
+    {
+
+        if(hitForce>0) 
+        {
+            speed = 0;
+            Vector3 direction = hitPos-transform.position;
+            direction.z=0;
+               rb.AddForce(Vector2.right*-direction.x*hitForce*Time.deltaTime*100,ForceMode.Acceleration);
+               rb.AddForce(Vector2.up*-direction.y*hitForce/100*Time.deltaTime*100,ForceMode.Acceleration);
+              hitForce-=Time.deltaTime*dampHitForce;
+        }
+        else
+        {
+            speed = speedReset;
+        }
+       
+    }
   
 }
