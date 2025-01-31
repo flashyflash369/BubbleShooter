@@ -9,6 +9,8 @@ public class PlayerStats : MonoBehaviour
    public  float Health;
    [Range(0,10)]
    public float SoapLevel;
+
+   public float score;
     
     void Awake() => instance = instance == null ? this : instance.Also(obj=> Destroy(this));
 

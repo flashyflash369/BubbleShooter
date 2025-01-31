@@ -22,7 +22,10 @@ public class Soap : Collectibles
        PlayerStats.instance.SoapLevel+=SoapLevel;
        PlayerStats.instance.Health+=HealthAdd;
        //Destroy
-       //Destroy.gameObject;
+       //ObjectPool.instance.ReturnObject("Soap",gameObject);
+       Destroy(gameObject);
+       PlayerStats.instance.score+=1;
+       UISystems.instance.SoapPoints.text = PlayerStats.instance.score.ToString();
       }
     }
    

@@ -577,6 +577,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spinSpeed: 120
+  force: 5
+  currentState: 0
 --- !u!1 &8350391842975978271
 GameObject:
   m_ObjectHideFlags: 0

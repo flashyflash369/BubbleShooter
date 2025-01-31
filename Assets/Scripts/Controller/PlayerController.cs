@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
      public Material flashMat;
      private float speedReset;
     
-     
+      Vector3 recoilDirection;
 //    private Animator anim;
     enum PlayerState
     {
@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
     public GameObject[] mouths;
     GameObject currentMouth;
     private PlayerState Currentstate;
-
+     Gun gun ;
 
     // Start is called before the first frame update
        void Start()
@@ -64,12 +64,13 @@ public class PlayerController : MonoBehaviour
         currentMouth = mouths[0];
         currentMouth.SetActive(true);
         speedReset = speed;
-        
+       gun = gunObject.GetComponent<Gun>();
           resetRecoilForce = recoilForce;
           resethitForce = hitForce;
           hitForce = 0;
          Currentstate = PlayerState.idle;
          Application.targetFrameRate = 60;
+        
        //  Physics.gravity = new Vector3(0, -1*Mathf.Abs(gravityScale), 0);
     
        // anim = GetComponent<Animator>();
@@ -89,7 +90,50 @@ private void Test()
         States();
         AimCursor();
 //        Debug.Log(Currentstate);
+       
+
+        if(Input.GetMouseButtonDown(0)){ 
+        grapplingMode = GrapplingMode.pull;
+        canReverse = false;
+        recoilDirection = transform.position-firePos.position;
+       
+        if(gun!= null)
+        {
         
+            if( gun.weapontype == Gun.Weapontype.glapplingGun && gun.onBubbleHit)
+            {
+
+            }
+            else
+            {
+
+                 if(PlayerStats.instance.SoapLevel>0 )
+                {
+                    recoilForce = resetRecoilForce;
+                      //rb.velocity = Vector2.zero;
+                }
+                else
+                {
+                    recoilForce = 0;
+                    
+                   // Debug.Log(recoilDirection);
+                }
+
+             }
+
+           
+        }
+           
+        }
+
+         if(Input.GetMouseButtonUp(0))
+            {
+                grapplingMode = GrapplingMode.pull;
+                rb.useGravity = true;
+               transform.eulerAngles = new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,0);
+            }
+        
+       
     }
     void FixedUpdate()
     {
@@ -98,13 +142,17 @@ private void Test()
        if (isGrounded && Input.GetKeyDown(KeyCode.Space)) {Jump();}
        
 
+       
+       
+      Recoil();
        Move();
-       if(Input.GetMouseButtonDown(0)){ if(PlayerStats.instance.SoapLevel<=0){return;}recoilForce = resetRecoilForce ;Recoil();}
       HitbackForce();
-
+        GrapplingPhysics();
+       
+       
     }
     /// <summary>
-/// Player States
+/// Player States//
 /// </summary>
 #region PlayerState
 void States()
@@ -290,14 +338,99 @@ void PhyscisUpdate()
     }
     public void Recoil()
     {  
-          Vector3 dashDirection = transform.position-firePos.position;
-          dashDirection.z = 0;
-          //rb.AddForce(dashDirection*dashSpeed*Time.deltaTime*6,ForceMode.Impulse);
-          rb.velocity =dashDirection*recoilForce*Time.deltaTime*6 ;
+          if(recoilForce>0){  
+            rb.velocity = Vector2.zero;
+          recoilDirection.z = 0;
+         Vector2 dir = recoilDirection.normalized;
+          rb.AddForce(new Vector2(rb.velocity.x+(dir.x*recoilForce*Time.deltaTime),(dir.y*recoilForce*Time.deltaTime*6) ),ForceMode.VelocityChange);
+        //rb.velocity =new Vector2(rb.velocity.x+(dir.x*recoilForce*Time.deltaTime),rb.velocity.y+(dir.y*recoilForce*Time.deltaTime*6) );
           recoilForce-=Time.deltaTime*DashDamping;
-          if(recoilForce<0){recoilForce = resetRecoilForce;}
+          }
+          else{}
+         
+       
     }
-    
+
+    [Header("Grappling Properties")]
+    [SerializeField] private float reverseDistance;
+    [SerializeField] private float pullForce = 50;
+    [SerializeField] private float swingForce;
+    [SerializeField] private float ropeDistance;
+     bool canReverse = false;
+     Vector3 torque;
+    enum GrapplingMode
+    {
+        pull,
+        reverse,
+        swing
+    }
+    GrapplingMode  grapplingMode ;
+    void GrapplingPhysics()
+    {
+        if(grapplingMode==GrapplingMode.pull)
+        {
+            
+              ///Apply Force in Direction
+            if(Input.GetMouseButton(0) && gun.lockBubble)
+            {
+                
+                 rb.velocity = gun.pullDir.normalized*50*Time.deltaTime*6;
+                 if(canReverse==false){canReverse = Vector2.Distance(gun.target,transform.position) <1 ? true: false;}
+                    Debug.Log("Reverse Distance: "+Vector2.Distance(gun.target,transform.position));
+
+                 //Transition
+                 if(Vector2.Distance(gun.target,transform.position)>reverseDistance&& canReverse)
+                 {
+                    grapplingMode = GrapplingMode.reverse;
+                 }
+            }
+
+        }
+
+         if(grapplingMode==GrapplingMode.reverse)
+        {
+           
+              ///Apply Force in Direction
+            if(Input.GetMouseButton(0) && gun.lockBubble)
+            {
+                 rb.velocity = -gun.pullDir.normalized*50*Time.deltaTime*6;
+               
+                 //Transition
+                 if(Vector2.Distance(gun.target,transform.position)>ropeDistance )
+                 {
+                    grapplingMode = GrapplingMode.swing;
+                    rb.useGravity = false;
+                 }
+            }
+
+        }
+
+         if(grapplingMode==GrapplingMode.swing)
+        {
+                
+
+            //torque = new Vector3(0,0,gun.target.z);
+              //rb.AddTorque(torque*5,ForceMode.Acceleration);
+              
+            if(Input.GetMouseButton(0) && gun.lockBubble)
+            {
+                
+                 ///Apply Force in Direction
+              ///
+              if(transform.rotation.z<90)
+              {
+              //   transform.RotateAround(gun.target,Vector3.forward,swingForce*Time.deltaTime);
+              }
+              else if( transform.rotation.z > 0)
+              {
+                 transform.RotateAround(gun.target,-Vector3.forward,swingForce*Time.deltaTime);
+              }
+                 //Transition
+            }
+
+        }
+       
+    }    
   #endregion
 
     [SerializeField] private float hitForce;
