@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -11,6 +12,8 @@ public class GameManager : MonoBehaviour
     // Static instance property
     public static GameManager Instance { get; private set; }
     public GameObject gameObject;
+    [SerializeField] UnityEvent OnGameStart = new UnityEvent();
+    [SerializeField] UnityEvent OnRespawn = new UnityEvent(); 
 
     // Awake method to enforce Singleton pattern
     private void Awake()
