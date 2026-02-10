@@ -58,7 +58,7 @@ public class Bullet : MonoBehaviour,IIntereactable
       //  rb.AddForce(-transform.right.normalized* speed * Time.fixedDeltaTime*6, ForceMode2D.Force);
        
     //playerController.Recoil();
-    rb.velocity = -transform.right* speed * Time.fixedDeltaTime*6;
+    rb.linearVelocity = -transform.right* speed * Time.fixedDeltaTime*6;
      // rb.velocity = new Vector3(  rb.velocity.x * speed * Time.fixedDeltaTime*6,rb.velocity.y,rb.velocity.z);
      
      
@@ -80,7 +80,7 @@ public class Bullet : MonoBehaviour,IIntereactable
        // if (gameObject != null){gameObject.transform.position = transform.position;}
        
         // Handle damage if target implements IDamagabl
-        if (rb.velocity != Vector3.zero && collider.gameObject.tag == "Bounce")
+        if (rb.linearVelocity != Vector3.zero && collider.gameObject.tag == "Bounce")
         {
             // Calculate the direction of movement
 

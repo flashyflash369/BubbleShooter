@@ -4,7 +4,8 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class NarrationManager : MonoBehaviour {
+public class NarrationManager : MonoBehaviour 
+{
 
     private Narration currentNarration;// Current active narration
     private int currentStoryPoint;
@@ -12,6 +13,8 @@ public class NarrationManager : MonoBehaviour {
     [SerializeField] private GameObject baseUI;
     private TMP_Text tmpText;
     private int currentTextIndex; // Index to track which text to display next
+
+    private PlayerController player;
 
 
     public float typewriterSpeed = 0.05f; // Speed of the typewriter effect
@@ -23,6 +26,7 @@ public class NarrationManager : MonoBehaviour {
 
     //Start
     private void Start() {
+            player = FindFirstObjectByType<PlayerController>();
         // Get the TMP_Text component from baseUI (or its children)
         tmpText = baseUI.GetComponentInChildren<TMP_Text>();
 
@@ -52,6 +56,16 @@ public class NarrationManager : MonoBehaviour {
     {
         // Unsubscribe from the event
         EventSystem.OnStoryPointTriggered -= HandleStoryPointTriggered;
+    }
+
+    void FreezePlayer()
+    {
+        player.FreezePlayer();
+    }
+
+    void UnfreezePlayer()
+    {
+        player.UnfreezePlayer();
     }
 
 
@@ -104,6 +118,7 @@ public class NarrationManager : MonoBehaviour {
         currentNarration = narration;
         currentTextIndex = 0; // Start at the first text
 
+        FreezePlayer();    
         // Show the UI
         baseUI.SetActive(true);
 
@@ -153,6 +168,7 @@ public class NarrationManager : MonoBehaviour {
         Debug.Log("Narration ended.");
         currentNarration = null;
         baseUI.SetActive(false); // Hide the UI when narration ends
+        UnfreezePlayer(); // Unfreeze the player when narration ends
         EventSystem.OnStoryPointDestroy?.Invoke(currentStoryPoint);//destroy respective storypoint trigger
     }
 

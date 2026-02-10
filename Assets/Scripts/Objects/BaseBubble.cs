@@ -28,7 +28,7 @@ public abstract class BaseBubble : MonoBehaviour
 public virtual void FloatingMechanics()
 {
 
-    rb.velocity =new Vector2(bubbleDir.x*floatingForce*Time.deltaTime*6,bubbleDir.y*floatingForce*Time.deltaTime*6) ;
+    rb.linearVelocity =new Vector2(bubbleDir.x*floatingForce*Time.deltaTime*6,bubbleDir.y*floatingForce*Time.deltaTime*6) ;
     
     //
    // rb.AddForce(Vector2.down*Drag*maxBubbleHeight,ForceMode.Impulse);

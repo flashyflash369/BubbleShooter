@@ -1,29 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Soap : Collectibles
 {
+  [Header("Prefab to Spawn")]
+  [SerializeField] private GameObject soapPrefab;
 
-    //Properties
-    [SerializeField] private int SoapLevel;
-    [SerializeField] private int HealthAdd;
-    [SerializeField] private GameObject soapObject;
+  private  GameObject soapInstance ;
 
-    private void OnTriggerEnter(Collider other) 
-    {
-      if (other.CompareTag("Player"))
-      {
-       //Add to SoapLevel and Increase Health
-       Debug.Log("Added 1 to Saoplevel");
-       Debug.Log("Added 1 to Healthlevel");
-
-       EventSystem.TriggerCollectible(SoapLevel, HealthAdd); // Raise the event, passing the storyPointIndex
-       PlayerStats.instance.SoapLevel+=SoapLevel;
-       PlayerStats.instance.Health+=HealthAdd;
-       //Destroy
-       //Destroy.gameObject;
-      }
-    }
-   
+  void Start()
+  {
+    // 🔹 Instantiate a COPY at this soap's position
+     soapInstance = Instantiate(soapPrefab, transform.position, transform.rotation);
+  }
 }

@@ -41,6 +41,8 @@ public class PlayerController : MonoBehaviour
      private Vector3 mousePos;
      public Material flashMat;
      private float speedReset;
+
+     private bool isFrozen = false;
     
      
 //    private Animator anim;
@@ -75,15 +77,31 @@ public class PlayerController : MonoBehaviour
        // anim = GetComponent<Animator>();
     }
 
-//[AtomicCommand(name: "TestConsole")]
-private void Test()
-{
- Debug.Log("Hello Console");
-}
+    public void FreezePlayer()
+    {
+        isFrozen = true;
+
+        // Stop motion immediately
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
+
+    public void UnfreezePlayer()
+    {
+        isFrozen = false;
+    }
+
+    //[AtomicCommand(name: "TestConsole")]
+    private void Test()
+    {
+    Debug.Log("Hello Console");
+    }
 
     // Update is called once per frame
     void Update()
     {
+        if (isFrozen) return;
+
         movePositions = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
         FlipXAxis();
         States();
@@ -93,6 +111,11 @@ private void Test()
     }
     void FixedUpdate()
     {
+        if (isFrozen)
+        {
+            rb.linearVelocity = Vector3.zero;
+            return;
+        }
        //PhyscisUpdate();
        isGrounded = Physics.CheckSphere(groundedPos.position,groundRadius,layerMask);
        if (isGrounded && Input.GetKeyDown(KeyCode.Space)) {Jump();}
@@ -200,12 +223,12 @@ void PhyscisUpdate()
     }
     void Jump()
     {
-        rb.velocity =jumpForce*Time.deltaTime*Vector2.up*6;
+        rb.linearVelocity =jumpForce*Time.deltaTime*Vector2.up*6;
        //transform.Translate(jumpForce*Time.deltaTime*Vector2.up);
     }
     void Move()
     {
-         rb.velocity = new Vector3(movePositions.x*speed*Time.deltaTime,rb.velocity.y,rb.position.z);
+         rb.linearVelocity = new Vector3(movePositions.x*speed*Time.deltaTime,rb.linearVelocity.y,rb.position.z);
     }
 
     void FlipXAxis()
@@ -293,7 +316,7 @@ void PhyscisUpdate()
           Vector3 dashDirection = transform.position-firePos.position;
           dashDirection.z = 0;
           //rb.AddForce(dashDirection*dashSpeed*Time.deltaTime*6,ForceMode.Impulse);
-          rb.velocity =dashDirection*recoilForce*Time.deltaTime*6 ;
+          rb.linearVelocity =dashDirection*recoilForce*Time.deltaTime*6 ;
           recoilForce-=Time.deltaTime*DashDamping;
           if(recoilForce<0){recoilForce = resetRecoilForce;}
     }
