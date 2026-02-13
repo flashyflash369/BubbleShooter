@@ -97,7 +97,8 @@ public class Bullet : MonoBehaviour,IIntereactable
             GameObject  gameObject = Instantiate(bubbleObject,transform.position,quaternion.identity);
             gameObject.transform.position = collider.transform.position;
             collider.transform.SetParent(gameObject.transform);
-            EventSystem.TriggerOnEnemyHit();
+            collider.gameObject.GetComponent<Enemy>().Capture();
+            //EventSystem.TriggerOnEnemyHit();
         }
         
         

@@ -1,175 +1,195 @@
-using System;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    // Properties
+
     [Header("Movement Settings")]
-    [SerializeField] private float moveSpeed = 2f; // Speed of the enemy
-    [SerializeField] private Transform[] patrolPoints; // Patrol points array
-    private int currentPatrolIndex = 0; // Current patrol point index
-    // private bool canMove = true; // Whether the enemy can move
-    // private bool canPursue = false; // Whether the enemy can pursue
+    [SerializeField] private float moveSpeed = 2f;
 
-    private Transform targetPoint; // Current target patrol point
-    private Transform chasePoint; // Target to chase
+    [Header("Patrol Settings")]
+    [SerializeField] private Transform[] patrolPoints;
 
-    [SerializeField] private float chaseTime = 0;
-    [SerializeField] private bool chasing = true;
+    [Header("Chase Settings")]
+    [SerializeField] private float chaseTime = 3f;
 
-    private bool isCaptured = false;
 
-    private EnemyState currentEnemyState;
+    #region Variables
 
-    //Enum
+    private int currentPatrolIndex = 0;
+    private Transform currentPatrolTarget;
+    private Transform chaseTarget;
+
+    private float chaseTimer;
+
+    private EnemyState currentState;
+
     public enum EnemyState
     {
-        canMove,
-        canPursue,
-        captured,
+        Patrol,
+        Chase,
+        Captured
     }
 
-    // Methods
+    #endregion
+
+    #region UnityLifecycle
+
     private void Start()
     {
-        // Initialize patrol point if available
-        if (patrolPoints.Length > 0)
+        // Initialize patrol target safely
+        if (patrolPoints != null && patrolPoints.Length > 0)
         {
-            SetTargetPatrolPoint();
+            currentPatrolTarget = patrolPoints[currentPatrolIndex];
         }
-        
-        //Initialize EnemyState @ beginning
-        currentEnemyState = EnemyState.canMove;
-    }
 
-    void CountChase()
-    {
-        chasing = false;
+        ChangeState(EnemyState.Patrol);
     }
 
     private void Update()
     {
-        ReturnToPatrol();
+        switch (currentState)
+        {
+            case EnemyState.Patrol:
+                HandlePatrol();
+                break;
 
-        if (currentEnemyState == EnemyState.canMove)
-        {
-            Patrol();
-        }
-        else if (currentEnemyState == EnemyState.canPursue)
-        {
-            Pursue(chasePoint);
-        }
-        else if (currentEnemyState == EnemyState.captured)
-        {
-            //Do nothing
-        }
+            case EnemyState.Chase:
+                HandleChase();
+                break;
 
+            case EnemyState.Captured:
+                // Do nothing when captured
+                break;
+        }
     }
 
     private void OnEnable()
     {
-        // Subscribe to the event
-        EventSystem.OnEnemyDetectTriggered += HandleEnemyTriggered;
-        EventSystem.OnEnemyHit += HandleEnemyHitTrigger;
+        //EventSystem.OnEnemyDetectTriggered += OnPlayerDetected;
+       // EventSystem.OnEnemyHit += OnCaptured;
     }
 
     private void OnDisable()
     {
-        // Unsubscribe from the event
-        EventSystem.OnEnemyDetectTriggered -= HandleEnemyTriggered;
-        EventSystem.OnEnemyHit -= HandleEnemyHitTrigger;
+        //EventSystem.OnEnemyDetectTriggered -= OnPlayerDetected;
+        //EventSystem.OnEnemyHit -= OnCaptured;
     }
 
-    private void HandleEnemyTriggered(Transform playerTransform)
-    {
-        Debug.Log("Player Detected: " + playerTransform);
-        if(!isCaptured)
-         {
-           currentEnemyState = EnemyState.canPursue;
-         }
-        chasing = true;
-        chasePoint = playerTransform; // Assign the player's transform as the chase target
-    }
-
-    //CAPTURED
-    private void HandleEnemyHitTrigger()
-    {
-        currentEnemyState = EnemyState.captured;
-        isCaptured = true;
-    }
-
-    // Move the enemy towards the current patrol point
-    private void Patrol()
-    {
-        if (targetPoint == null) return;
-
-        MoveTowardsTarget(targetPoint);
-
-        // Check if the enemy has reached the patrol point
-        if (HasReachedTarget())
-        {
-            UpdatePatrolPoint();
-        }
-    }
-
-    //Chase the player on detect
-    #region ChaseThePlayerCode
-    private void Pursue(Transform chasePoint)
-    {
-        if (chasePoint == null) return;
-
-        // Move towards the player's position
-        transform.position = Vector3.MoveTowards(
-            transform.position,
-            chasePoint.position,
-            moveSpeed * Time.deltaTime
-        );
-
-        //Timer for the chasetime to send it to zero
-        Invoke("CountChase",chaseTime);
-        //change chasing bool to false
-
-        // // Optionally rotate towards the player
-        // Vector3 direction = (chasePoint.position - transform.position).normalized;
-        // Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-        // transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * moveSpeed);
-    }
-
-    // Move towards the given target point
-    private void MoveTowardsTarget(Transform target)
-    {
-        transform.position = Vector3.MoveTowards(transform.position, target.position, moveSpeed * Time.deltaTime);
-    }
-
-    // Check if the enemy has reached the current target point
-    private bool HasReachedTarget()
-    {
-        return Vector3.Distance(transform.position, targetPoint.position) < 0.1f;
-    }
-
-    // Update the current patrol point and set the next target
-    private void UpdatePatrolPoint()
-    {
-        currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
-        SetTargetPatrolPoint();
-    }
-
-    // Set the target patrol point based on the current index
-    private void SetTargetPatrolPoint()
-    {
-        targetPoint = patrolPoints[currentPatrolIndex];
-    }
     #endregion
 
-    //Stop chasing after someTime
-    private void ReturnToPatrol()
+    #region StateManagement
+
+    /// <summary>
+    /// Changes enemy state and handles enter-state logic.
+    /// </summary>
+    private void ChangeState(EnemyState newState)
     {
-        //When chase time ends, return to patrol
-        if (!chasing & !isCaptured)
+        currentState = newState;
+
+        switch (newState)
         {
-            currentEnemyState = EnemyState.canMove;
+            case EnemyState.Patrol:
+                break;
+
+            case EnemyState.Chase:
+                chaseTimer = chaseTime; // Reset chase timer
+                break;
+
+            case EnemyState.Captured:
+                break;
         }
     }
 
+     /// <summary>
+    /// Called when enemy is captured.
+    /// Stops all behavior.
+    /// </summary>
+    private void OnCaptured()
+    {
+        ChangeState(EnemyState.Captured);
+    }
 
+    #endregion
+
+    #region PatrolLogic
+
+    private void HandlePatrol()
+    {
+        if (currentPatrolTarget == null)
+            return;
+
+        MoveTowards(currentPatrolTarget.position);
+
+        // If reached patrol point, go to next
+        if (Vector3.Distance(transform.position, currentPatrolTarget.position) < 0.1f)
+        {
+            currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
+            currentPatrolTarget = patrolPoints[currentPatrolIndex];
+        }
+    }
+
+    #endregion
+
+    #region ChaseLogic
+
+    private void HandleChase()
+    {
+        if (chaseTarget == null)
+        {
+            ChangeState(EnemyState.Patrol);
+            return;
+        }
+
+        MoveTowards(chaseTarget.position);
+
+        // Countdown chase timer
+        chaseTimer -= Time.deltaTime;
+
+        if (chaseTimer <= 0f)
+        {
+            ChangeState(EnemyState.Patrol);
+        }
+    }
+
+    /// <summary>
+    /// Moves enemy toward a world position.
+    /// </summary>
+    private void MoveTowards(Vector3 targetPosition)
+    {
+        transform.position = Vector3.MoveTowards(
+            transform.position,
+            targetPosition,
+            moveSpeed * Time.deltaTime
+        );
+    }
+
+    #endregion
+
+    #region CallableFunctions
+
+    /// <summary>
+    /// Called when player is detected.
+    /// Switches enemy to Chase state.
+    /// </summary>
+    public void OnPlayerDetected(Transform playerTransform)
+    {
+        if (currentState == EnemyState.Captured)
+            return;
+
+        chaseTarget = playerTransform;
+        ChangeState(EnemyState.Chase);
+    }
+
+    /// <summary>
+    /// Called when player is hit by enemy.
+    /// </summary>
+    public void Capture()
+    {
+        if (currentState == EnemyState.Captured)
+            return;
+
+        OnCaptured();
+        Debug.Log("Player hit by enemy!");
+    }
+    #endregion
 }
