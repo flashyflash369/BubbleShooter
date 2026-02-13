@@ -10,6 +10,6 @@ public class Soap : Collectibles
   void Start()
   {
     // 🔹 Instantiate a COPY at this soap's position
-     soapInstance = Instantiate(soapPrefab, transform.position, transform.rotation);
+     //soapInstance = Instantiate(soapPrefab, transform.position, transform.rotation);
   }
 }
